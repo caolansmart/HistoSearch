@@ -48,7 +48,7 @@ function SearchForKeyword(){
   
   var keywordCount = new Object();
 
-  var keyword = document.getElementById("input").value;
+  var keyword = " " + document.getElementById("input").value;
   
   console.log(keyword);
 
@@ -83,13 +83,9 @@ function SearchForKeyword(){
 
     if(keywordCount[specimenType.specimenTypeCode]> max){
 
-      if ((keyword.toLowerCase() == "cystectomy") && (specimenType.specimenTypeCode == "GB")){
+      max = keywordCount[specimenType.specimenTypeCode];
+      maxSpecimenType = specimenType.specimenTypeCode;
 
-      }
-      else{
-        max = keywordCount[specimenType.specimenTypeCode];
-        maxSpecimenType = specimenType.specimenTypeCode;
-      }
     }
     console.log(specimenType.specimenTypeCode);
     console.log("Count = " + keywordCount[specimenType.specimenTypeCode]);
