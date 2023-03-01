@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script type="module" src="index.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=Montserrat:wght@400;700&family=Roboto:ital,wght@0,400;1,700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HistoSearch</title>
+  <link rel="icon" href="images/magnifying-glass.png">
+  <style>
+    body{
+      font-family: Kanit;
+      background-color: aliceblue;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    #preloader{
+      background-color: aliceblue;
+      height: 100vh;
+      width: 100%;
+      position: fixed;
+      z-index: 100;
+      margin: 0 0 0 0;
+      padding: 0 0 0 0;
+      right: 0px;
+      top: 0px;
+    }
+    
+    .header,
+    .search{
+      text-align: center;
+    }
+
+    h1{
+      font-family: Kanit;
+      color: rgb(1, 1, 107);
+      vertical-align: middle;
+    }
+
+    img{
+      width: 50px;
+      vertical-align: middle;
+      margin-top: 20px;
+      margin-left: 0;
+      z-index: 1;
+      position:sticky;
+      transform: scaleX(-1);
+    }
+
+    input.search-input{
+      vertical-align: middle;
+      padding: 10px 20px 10px 20px;
+      width: 300px;
+      border-radius: 20px;
+      border: none;
+      box-shadow: 2px 2px 10px grey;
+      transition: box-shadow 0.15s;
+      margin: 5px 5px 15px 0px;
+    }
+
+    input.search-input:hover,
+    input.search-input:focus{
+      box-shadow: 2px 2px 20px grey;
+      outline: none;
+    }
+
+    button.search-button{
+      vertical-align: middle;
+      background-color: rgb(1, 1, 107);
+      color: white;
+      font-size: 15px;
+      border: none;
+      margin: 5px 5px 15px 5px;
+      padding: 7px 15px 7px 15px;
+      border-radius: 20px;
+      box-shadow: 2px 2px 10px grey;
+      transition: box-shadow 0.15s, margin 0.15s, padding 0.15s,
+      background-color 0.15s;
+      cursor: pointer;
+      font-family: Kanit;
+    }
+
+    img.search-img{
+      margin-top: 0;
+      height: 20px;
+      object-fit: contain;
+      transform:scaleX(1);
+    }
+
+    img.gold-medal{
+      display: inline-block;
+      vertical-align: middle;
+      margin: 0 0 0 0;
+      height: 30px;
+      object-fit: contain;
+      position: absolute;
+      right:450px;
+      top: 5px;
+    }
+
+    p.top-match{
+      display: inline-block;
+      width: 50px;
+      margin-right: 50px;
+      font-size: 10px;
+      color: rgb(1, 1, 107);
+      position: absolute;
+      right: 400px;
+      top: 25px;
+    }
+
+    button.search-button:hover{
+      box-shadow: 2px 2px 20px grey;
+      background-color: rgb(0, 45, 128);
+    }
+
+    button.search-button:active{
+      margin: 7px 3px 13px 7px;
+      box-shadow: none;
+      background-color: gold;
+      cursor: progress;
+    }
+
+    .result{
+      text-align: center;
+      font-size: 15px;
+      margin: 15px 0 15px 0;
+      cursor: default;
+      height: 50px;
+      color: rgb(46, 111, 231);
+      transition: background-color 0.5s;
+    }
+
+    .no-results{
+      text-align: center;
+      background-color: aliceblue;
+      color:rgb(102, 154, 250);
+      margin-top: 50px;
+    }
+
+    .result-data{
+      display: inline-block;
+      position: relative;
+      height: 50px;
+    }
+
+
+    p.result-code{
+      background-color: rgb(0, 45, 128);
+      display: inline-block;
+      width: 100px;
+      color:white;
+      border-radius: 5px;
+    }
+
+    p.result-desc{
+      background-color: rgb(102, 154, 250);
+      display: inline-block;
+      width: 300px;
+      color:white;
+      border-radius: 5px;
+
+    }
+
+    p.credits{
+      display: inline-block;
+      position: absolute;
+      bottom: 0;
+      right: 10px;
+      color: rgb(209, 233, 253);
+      font-size: 12px;
+    }
+
+    p.version{
+      display: inline-block;
+      position: absolute;
+      bottom: 0;
+      left: 10px;
+      color: rgb(209, 233, 253);
+      font-size: 12px;
+    }
+
+    .balancer{
+      margin-left: 150px;
+      display: inline-block
+    }
+
+
+
+
+  </style>
+</head>
+<body>
+
+
+  <div class="header">
+    <h1>H i s t <img class="magnifying-glass" src=images/magnifying-glass.png>S e a r c h</h1>
+    
+  </div>
+  
+  <div class="search">
+    <form onsubmit="SearchForKeyword();" action="javascript:void(0);">
+      <input class="search-input" id="input" type="text" placeholder="Enter keyword or phrase">
+      <button class="search-button" id="button"><img class="search-img" src=images/magnifying-glass.png></button>
+    </form>
+
+  </div>
+
+  <div class="result" id="result0">
+    <div class="result-data" id="result0-data">
+      <p class="result-code" id="result0-code"></p>
+      <p class="result-desc" id="result0-desc"></p>
+    </div>
+  </div>
+  
+  <div class="line"></div>
+
+  <div class="result" id="result1">
+    <div class="result-data" id="result1-data">
+      <p class="result-code" id="result1-code"></p>
+      <p class="result-desc" id="result1-desc"></p>
+    </div>
+  </div>
+
+  <div></div>
+
+  <div class="result" id="result2">
+    <div class="result-data" id="result2-data">
+      <p class="result-code" id="result2-code"></p>
+      <p class="result-desc" id="result2-desc"></p>
+    </div>
+  </div>
+
+  <div></div>
+
+  <div class="result" id="result3">
+    <div class="result-data" id="result3-data">
+      <p class="result-code" id="result3-code"></p>
+      <p class="result-desc" id="result3-desc"></p>
+    </div>
+  </div>
+
+  <div></div>
+
+  <div class="result" id="result4">
+    <div class="result-data" id="result4-data">
+      <p class="result-code" id="result4-code"></p>
+      <p class="result-desc" id="result4-desc"></p>
+    </div>
+  </div>
+
+  <div></div>
+
+  <div class="result" id="result5">
+    <div class="result-data" id="result5-data">
+      <p class="result-code" id="result5-code"></p>
+      <p class="result-desc" id="result5-desc"></p>
+    </div>
+  </div>
+
+  <div></div>
+
+  <div class="result" id="result6">
+    <div class="result-data" id="result6-data">
+      <p class="result-code" id="result6-code"></p>
+      <p class="result-desc" id="result6-desc"></p>
+    </div>
+  </div>
+
+  <div></div>
+
+  <div class="result" id="result7">
+    <div class="result-data" id="result7-data">
+      <p class="result-code" id="result7-code"></p>
+      <p class="result-desc" id="result7-desc"></p>
+    </div>
+  </div>
+
+  <div></div>
+
+  <div class="result" id="result8">
+    <div class="result-data" id="result8-data">
+      <p class="result-code" id="result8-code"></p>
+      <p class="result-desc" id="result8-desc"></p>
+    </div>
+  </div>
+
+  <div></div>
+
+  <div class="result" id="result9">
+    <div class="result-data" id="result9-data">
+      <p class="result-code" id="result9-code"></p>
+      <p class="result-desc" id="result9-desc"></p>
+    </div>
+  </div>
+
+  <div></div>
+
+  <div class="result" id="result10">
+    <div class="result-data" id="result10-data">
+      <p class="result-code" id="result10-code"></p>
+      <p class="result-desc" id="result10-desc"></p>
+    </div>
+  </div>
+
+
+  <div class="footer">
+    <p class="version">Version 1.0</p>
+    <p class="credits">by Caolan Smart</p>
+  </div>
+
+</body>
+</html>
