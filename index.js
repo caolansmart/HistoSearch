@@ -18,7 +18,7 @@ let worksheet;
 let specimenTypes;
 
 (async() => {
-  const excelUrl = "/Histosearch/HistoSearch DataSet To db.xlsx";
+  const excelUrl = "HistoSearch DataSet To db.xlsx";
   const data = await (await fetch(excelUrl)).arrayBuffer();
   /* data is an ArrayBuffer */
   workbook = read(data);
@@ -43,6 +43,8 @@ function SearchForKeyword(){
   let resultList = new Array(0);
 
   let resultDescList = new Array(0);
+
+  let resultSubTypeList = new Array(0);
   
   var keywordCount = new Object();
 
@@ -63,6 +65,7 @@ function SearchForKeyword(){
   topMatch.className ="top-match";
 
   topMatchImg.src = "images/gold-medal.png";
+
   topMatchImg.className = "gold-medal";
 
   topMatchBalancer.appendChild(topMatchBalancerText);
@@ -108,6 +111,7 @@ function SearchForKeyword(){
         else{
           resultList.push(specimenType.specimenTypeCode);
           resultDescList.push(specimenType.specimenTypeDesc);
+          resultSubTypeList.push(specimenType.specimenSubType);
         }
       }
 
@@ -128,6 +132,7 @@ function SearchForKeyword(){
       
       let codeElementTopMatch = document.getElementById("result0-code");
       let codeDescElementTopMatch = document.getElementById("result0-desc");
+      let subTypeElementTopMatch = document.getElementById("result0-subtype");
 
       
         if (resultList[i-1] == maxSpecimenType){
@@ -136,6 +141,7 @@ function SearchForKeyword(){
           
           codeElementTopMatch.innerHTML=resultList[i-1];
           codeDescElementTopMatch.innerHTML=resultDescList[i-1];
+          subTypeElementTopMatch.innerHTML=resultSubTypeList[i-1];
 
           codeElementTopMatch.parentNode.insertBefore(topMatch, codeElementTopMatch);
   
@@ -147,20 +153,26 @@ function SearchForKeyword(){
           oldResultElement.style.margin = "0 0 0 0";
           oldResultDataElement.style.height = "0px";
 
+          GetSubTypeColor(0, resultSubTypeList[i-1]);
         }
         else{
           try{
             let codeElement = document.getElementById("result" + i + "-code");
             let codeDescElement = document.getElementById("result" + i + "-desc");
+            let subTypeElement = document.getElementById("result" + i + "-subtype");
   
             document.getElementById("result" + i).style.backgroundColor="rgb(207, 231, 252)";
   
             codeElement.innerHTML=resultList[i-1];
             codeDescElement.innerHTML=resultDescList[i-1];
+            subTypeElement.innerHTML=resultSubTypeList[i-1];
+
           }
           catch{
-            console.log("Over page element limit(12)")
+            console.log("Over page element limit(10)")
           }
+
+          GetSubTypeColor(i, resultSubTypeList[i-1]);
         }
     }
   }
@@ -205,7 +217,9 @@ function RemoveResults(){
     try{
       document.getElementById("result" + j + "-code").innerHTML = "";
       document.getElementById("result" + j + "-desc").innerHTML="";
+      document.getElementById("result" + j + "-subtype").innerHTML="";
       document.getElementById("result" + j).style.backgroundColor="";
+      document.getElementById("result" + j + "-subtype").style.backgroundColor="";
     }
     catch{}
 
@@ -231,5 +245,68 @@ function RemoveResults(){
     catch{
       console.log("Could not remove 'No-results' element");
     }
+  }
+}
+
+// --- FUNCTION TO GET COLOUR OF SUBTYPE --- //
+
+function GetSubTypeColor(resultNo, subType){
+  switch(subType){
+    case "BREAST":
+      document.getElementById("result" + resultNo + "-subtype").style.color="rgb(252,228,214)";
+      console.log("orange");
+      break;
+    case "BST":
+      document.getElementById("result" + resultNo + "-subtype").style.color="rgb(217,217,217)";
+      console.log("grey");
+      break;
+    case "CVS":
+      document.getElementById("result" + resultNo + "-subtype").style.color="rgb(112,48,160)";
+      console.log("purple");
+      break;
+    case "ENDOCRINE":
+      document.getElementById("result" + resultNo + "-subtype").style.color="rgb(26,239,218)";
+      console.log("green");
+      break;
+    case "GI":
+      document.getElementById("result" + resultNo + "-subtype").style.color="rgb(0,176,240)";
+      console.log("blue");
+      break;
+    case "GYNAE":
+      document.getElementById("result" + resultNo + "-subtype").style.color="rgb(255,102,255)";
+      console.log("pink");
+      break;
+    case "HAEM":
+      document.getElementById("result" + resultNo + "-subtype").style.color="rgb(255,0,0)";
+      console.log("red");
+      break;
+    case "HNOP":
+      document.getElementById("result" + resultNo + "-subtype").style.color="rgb(153,204,255)";
+      console.log("lightblue");
+      break;
+    case "HPB":
+      document.getElementById("result" + resultNo + "-subtype").style.color="rgb(255,255,0)";
+      console.log("yellow");
+      break;
+    case "NPATH":
+      document.getElementById("result" + resultNo + "-subtype").style.color="rgb(255,242,204)";
+      console.log("lightgoldenrodyellow");
+      break;
+    case "SKIN":
+      document.getElementById("result" + resultNo + "-subtype").style.color="rgb(112,173,71)";
+      console.log("green");
+      break;
+    case "THORACIC":
+      document.getElementById("result" + resultNo + "-subtype").style.color="rgb(255,192,0)";
+      console.log("lightsalmon");
+      break;
+    case "UROLOGY":
+      document.getElementById("result" + resultNo + "-subtype").style.color="rgb(68,84,106)";
+      console.log("darkblue");
+      break;
+    case "IMF":
+      document.getElementById("result" + resultNo + "-subtype").style.color="rgb(255,0,0)";
+      console.log("red");
+      break;
   }
 }
